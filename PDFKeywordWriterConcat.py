@@ -1,35 +1,35 @@
 import os, PyPDF2
 
-print ('Hello World')
+def keywordWriter():
+        print ('Hello World')
+        pdfWriter = PyPDF2.PdfFileWriter()
+        pdfReader = PyPDF2.PdfFileReader(TestFiles/test.pdf)
+        keyword = 'A123'
 
-pdfFileObj = open('test.pdf', 'rb')
-pdfReader = PyPDF2.PdfFileReader(pdfFileObj)
-pdfWriter = PyPDF2.PdfFileWriter()
-keyword = 'A123'
+        pdfInfo = pdfReader.getDocumentInfo()
+        print(str(pdfInfo))
 
-pdfInfo = pdfReader.getDocumentInfo()
-print(str(pdfInfo))
+        keywordIn = pdfInfo['/Keywords']
 
-keywordIn = pdfInfo['/Keywords']
+        print(keywordIn)
 
-print(keywordIn)
+        print ('Number of pages ', pdfReader.numPages)
+        print ('Keyword ', keyword)
 
-print ('Number of pages ', pdfReader.numPages)
-print ('Keyword ', keyword)
+        keyword = ', '.join([keywordIn, 'C123'])
+        print ('Keyword ', keyword)
 
-keyword = ', '.join([keywordIn, 'C123'])
-print ('Keyword ', keyword)
-
-for pageNum in range(pdfReader.numPages):
-        pageObj = pdfReader.getPage(pageNum)
-        pdfWriter.addPage(pageObj)
+        for pageNum in range(pdfReader.numPages):
+                pageObj = pdfReader.getPage(pageNum)
+                pdfWriter.addPage(pageObj)
         
-pdfWriter.addMetadata({'/Author': 'madeline', '/Keywords': keyword})
+        pdfWriter.addMetadata({'/Author': 'madeline', '/Keywords': keyword})
 
-pdfOutputFile = open('outputFile.pdf', 'wb')
-pdfWriter.write(pdfOutputFile)
-pdfOutputFile.close()
-pdfFileObj.close()
+        pdfOutputFile = open('outputFile.pdf', 'wb')
+        pdfWriter.write(pdfOutputFile)
+        pdfOutputFile.close()
+        pdfFileObj.close()
 
+keywordWriter()
 
 
