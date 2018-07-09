@@ -20,11 +20,14 @@ def oemToSparesSheet(sparesFile):
                          for rowNumSpares in range(1, sparesSheet.max_row + 1):
                              sparesPartStr = sparesSheet.cell(row=rowNumSpares,column=2).value
                              quan = sparesSheet.cell(row=rowNumSpares,column=3).value
-                             # print ("maintPartName ", maintPartName, " sparesPartStr ", sparesPartStr)
+                             print ("maintPartName ", maintPartName, " sparesPartStr ", sparesPartStr)
                              if (sparesPartStr is not None) and (quan is not None) and (maintPartName in sparesPartStr):
-                                    print("Match ", maintPartName, " ", sparesPartStr)
-                                    #ToDo - write OEM from maint sheet to spares sheet
-                                    # Add this file to Git
+                                    # print("Match ", maintPartName, " ", sparesPartStr)
+                                    sparesSheet.cell(row=rowNumSpares,column=6).value = maintOem
+                                    wb.save(sparesFile)
+                                    
+                #ToDo - print cases (save to Excel?) where couldn't find part number in spares sheet (eg, Sew motor use S Series as part name in maintenance sheet)
+                                 
        
                                     
 
