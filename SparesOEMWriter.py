@@ -130,4 +130,4 @@ def sparesToPDFKeyword(sparesFile):
                 # Call writeKeyword
                 
 
-sparesToPDFKeyword('Out_DrySF_31621699.xlsx')
+sparesToPDFKeyword('TestFiles/Out_DrySF_31621699.xlsx')
