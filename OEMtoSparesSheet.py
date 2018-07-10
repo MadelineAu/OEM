@@ -54,6 +54,7 @@ def writeKeyword(pdfFile, keyword):
         pdfOutfile = '_'.join(['Out', pdfFileBasename])
 
         pdfInfo = pdfReader.getDocumentInfo()
+        keywordIn = ""
         # print('PDFInfo ', str(pdfInfo))
 
         if (os.path.exists(os.path.join(pdfDirectory, pdfOutfile))):
@@ -87,61 +88,66 @@ def writeKeyword(pdfFile, keyword):
 
         
 
-        if (os.path.exists(pdfOutfile)):
-                os.remove(pdfOutfile)
+        if (os.path.exists(os.path.join(pdfDirectory, pdfOutfile))):
+                print("Outfile exists")
+                pdfFileObjOutFile.close()
+                os.remove(os.path.join(pdfDirectory, pdfOutfile))
                 
         pdfOutputFile = open(os.path.join(pdfDirectory, pdfOutfile), 'wb')
         pdfWriter.write(pdfOutputFile)
+        # print("pdfOutfile ", pdfOutfile)
+        # print("pdfFileBasename ", pdfFileBasename)
         pdfOutputFile.close()
         pdfFileObj.close()
 
+        # Need to figure out how to rename Out_ file to original file name - use shutil.copy 2(src/dst)
+        # Then delete Out_file 
+        # os.rename(pdfOutfile, pdfFile)
 
-writeKeyword('TestFiles/test.pdf', 'a')
-writeKeyword('TestFiles/test.pdf', 'b')
-writeKeyword('TestFiles/test.pdf', 'c')
+
+##writeKeyword('TestFiles/test.pdf', 'e')
+##writeKeyword('TestFiles/test.pdf', 'f')
+##writeKeyword('TestFiles/test.pdf', 'g')
 
 #--------------------------------------------------------------------------------------------
 
 
-## Loops through spare parts worksheetand calls writeKeyword for each spare part with an
-## OEM file listed and writes the 20,000,000 and Manufacturer to the Keywords metadata
-##
-##def OemManufacturerToPDFKeyword(sparesFile):
-##		 wb = openpyxl.load_workbook(sparesFile)
-##		 ws = wb['spare parts']
-##		 oemFiles  = []
-##		 for rowNum in range(1, ws.max_row + 1):
-##				partMan = ws.cell(row=rowNum, column=6).value
-##				oem = ws.cell(row=rowNum, column= 7).value
-##				partNum = ws.cell(row=rowNum, column= 1).value
-##				
-##				if (oem is not None) and not ('www.' in oem):
-##						#create OEM list
-##						# if len(oem) > 5:
-##							  #  print('OEM length > 5')
-##						oem = oem.replace(" ", "")
-##						oemList = oem.split(',')
-##						print("oemList ",oemList)
-##
-##						for oemFile in oemList:
-##								#print('Find oem file ', oemFile)
-##								for folderName, subfolders, filenames in os.walk('C:\\Users\\Mick\\Documents\\OEM'):
-##										for filename in filenames:
-##												# When OEM matches filename, call writeKeyword
-##												# Need to split strings with a comma and loop
-##												oemFilePath = os.path.join(folderName, filename)
-##												# print("oemFile ", oemFile)
-##												if oemFile in filename:
-##														print("Match oemFile filename", oemFile, filename)
-##														print('Path and Filename ', oemFilePath)
-##														# overwrites when call twice. Look at write keyword
-##														writeKeyword(oemFilePath, partNum)
-##														# writeKeyword(oemFilePath, partMan)
-##				# if not none. Test for OEM file. Then filewalk in OEM directory. Change to right place.
-##				# Call writeKeyword
-##				
-##
-##OemManufacturerToPDFKeyword('TestFiles/Out_DrySF_31621699.xlsx')  
+ # Loops through spare parts worksheetand calls writeKeyword for each spare part with an
+ # OEM file listed and writes the 20,000,000 and Manufacturer to the Keywords metadata
+
+def OemManufacturerToPDFKeyword(sparesFile):
+    wb = openpyxl.load_workbook(sparesFile)
+    ws = wb['spare parts']
+    oemFiles  = []	
+
+    for rowNum in range(1, ws.max_row + 1):
+        partMan = ws.cell(row=rowNum, column=6).value
+        oem = ws.cell(row=rowNum, column= 7).value
+        partNum = ws.cell(row=rowNum, column= 1).value
+				
+        if (oem is not None) and not ('www.' in oem):
+            #create OEM list
+            # if len(oem) > 5:
+            #  print('OEM length > 5')
+            oem = oem.replace(" ", "")
+            oemList = oem.split(',')
+            print("oemList ",oemList)
+
+            for oemFile in oemList:
+                print('Find oem file ', oemFile)
+                for folderName, subfolders, filenames in os.walk('C:\\Users\\Mick\\Documents\\OEM'):
+                    for filename in filenames:
+                        # When OEM matches filename, call writeKeyword
+                        # Need to split strings with a comma and loop
+                        oemFilePath = os.path.join(folderName, filename)
+                        # print("oemFile ", oemFile)
+                        if oemFile in filename:
+                            print("Match oemFile filename", oemFile, filename)
+                            print('Path and Filename ', oemFilePath)
+                            writeKeyword(oemFilePath, partNum)
+                            writeKeyword(oemFilePath, partMan)
+
+OemManufacturerToPDFKeyword('TestFiles/Out_DrySF_31621699.xlsx')  
 													
 
 #oemToSparesSheet('TestFiles/OEMtoSparesSheet.xlsx')
